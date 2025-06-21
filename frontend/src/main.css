@@ -1,0 +1,11 @@
+@import "./tailwind.css";
+@import "./fonts.css";
+
+#app {
+  /* 铺满、无重复的背景图 */
+  background-image: url(/images/background-join-2560.avif); /* 替换为您的图片路径 */
+  background-repeat: no-repeat;
+  background-size: cover; /* 或者 contain, 100% 100% 根据需求选择 */
+  background-attachment: fixed; /* 可选：使背景图固定，不随滚动而滚动 */
+  background-position: center center; /* 可选：居中背景图 */
+}

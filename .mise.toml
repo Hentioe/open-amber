@@ -1,0 +1,47 @@
+[tools]
+"npm:pnpm" = "10"
+"npm:concurrently" = "latest"
+"cargo:dprint" = "latest"
+
+[tasks.setup]
+run = [
+  "bun install",
+  "pnpm --prefix frontend install",
+  "mkdir public -p",
+]
+
+[tasks.dev]
+run = "concurrently \"bun run dev\" \"pnpm --prefix frontend dev\""
+
+[tasks.frontend]
+run = "pnpm --prefix frontend dev"
+
+[tasks.backend]
+run = "bun run dev"
+
+[tasks.frontend-build]
+run = "pnpm --prefix frontend build"
+
+[tasks.backend-build]
+run = "bun run build"
+
+[tasks.deps-env]
+run = "docker compose -f docker-compose.dev.yml"
+
+[tasks.build]
+depends = ["frontend-build", "backend-build"]
+
+[tasks.lint]
+run = "pnpm --prefix frontend lint"
+
+[tasks.format]
+run = "dprint fmt"
+
+[tasks.check]
+depends = ["format", "lint"]
+
+[tasks.test]
+run = "bun test"
+
+[tasks.clean]
+run = "rm -rf public dist node_modules frontend/node_modules data"

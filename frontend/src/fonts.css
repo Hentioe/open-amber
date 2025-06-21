@@ -1,0 +1,44 @@
+/* ZCOOL_KuaiLe 字体 */
+@font-face {
+  font-family: "ZCOOL KuaiLe"; /* 自定义的字体名称 */
+  src: url("/fonts/ZCOOL_KuaiLe/ZCOOLKuaiLe-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* 优化字体加载的用户体验 */
+}
+
+/* Caudex 字体 - 常规 */
+@font-face {
+  font-family: "Caudex"; /* 自定义的字体名称 */
+  src: url("/fonts/Caudex/Caudex-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Caudex 字体 - 加粗 */
+@font-face {
+  font-family: "Caudex";
+  src: url("/fonts/Caudex/Caudex-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Caudex 字体 - 斜体 */
+@font-face {
+  font-family: "Caudex";
+  src: url("/fonts/Caudex/Caudex-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Caudex 字体 - 加粗斜体 */
+@font-face {
+  font-family: "Caudex";
+  src: url("/fonts/Caudex/Caudex-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}

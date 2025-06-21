@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-meow {
+    font-family: "ZCOOL KuaiLe", "Caudex", sans-serif;
+  }
+  .align-last-justify {
+    text-align-last: justify;
+  }
+  .shadow-strong {
+    box-shadow:
+      rgba(0, 0, 0, 0.25) 0px 14px 28px,
+      rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  }
+  .interpolate-allow-keywords {
+    interpolate-size: allow-keywords;
+  }
+}
+
+@layer components {
+  .bg-full-center {
+    background-repeat: no-repeat; /* 不重复背景图 */
+    background-size: cover; /* 或者 contain, 100% 100% 根据需求选择 */
+    background-position: center center; /* 可选：居中背景图 */
+  }
+}

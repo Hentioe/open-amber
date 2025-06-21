@@ -1,0 +1,21 @@
+when:
+  - branch: [main]
+    event: push
+
+steps:
+  image-build-push:
+    image: reg.hentioe.dev/library/plugin-docker-buildx
+    privileged: true
+    pull: true
+    settings:
+      registry: reg.hentioe.dev
+      repo: reg.hentioe.dev/private/open-amber
+      username:
+        from_secret: reg_admin_username
+      password:
+        from_secret: reg_admin_password
+      dockerfile: Dockerfile
+      platforms: linux/amd64,linux/arm64/v8
+      build_args:
+        - OPEN_AMBER_PLAUSIBLE_DOMAIN=icp.hentioe.dev
+        - OPEN_AMBER_PLAUSIBLE_SRC=https://stats-9ccc91cf.hentioe.dev/js/script.js

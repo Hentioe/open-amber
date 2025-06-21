@@ -1,0 +1,31 @@
+services:
+  server:
+    image: hentioe/open-amber:dev
+    restart: always
+    ports:
+      - ${OPEN_AMBER_PORT}:${OPEN_AMBER_PORT}
+    environment:
+      OPEN_AMBER_PORT: ${OPEN_AMBER_PORT}
+      OPEN_AMBER_BASE_URL: ${OPEN_AMBER_BASE_URL}
+      OPEN_AMBER_CAPINDE_BASE_URL: ${OPEN_AMBER_CAPINDE_BASE_URL}
+      OPEN_AMBER_CAPTCHA_TTL: ${OPEN_AMBER_CAPTCHA_TTL}
+      OPEN_AMBER_CAPTCHA_COMPLEXITY: ${OPEN_AMBER_CAPTCHA_COMPLEXITY}
+      OPEN_AMBER_VERIFY_SECRET: ${OPEN_AMBER_VERIFY_SECRET}
+      OPEN_AMBER_REVIEW_SECRET: ${OPEN_AMBER_REVIEW_SECRET}
+      OPEN_AMBER_ENCRYPTION_KEY: ${OPEN_AMBER_ENCRYPTION_KEY}
+      OPEN_AMBER_ADMIN_API_KEY: ${OPEN_AMBER_ADMIN_API_KEY}
+      OPEN_AMBER_RESEND_API_KEY: ${OPEN_AMBER_RESEND_API_KEY}
+      OPEN_AMBER_RESEND_SENDER: ${OPEN_AMBER_RESEND_SENDER}
+    volumes:
+      - ./data:/home/open-amber/data
+      - ./shared_assets:/home/open-amber/shared_assets
+    depends_on:
+      - capinde
+
+  capinde:
+    image: hentioe/capinde:0.1.0-dev
+    restart: always
+    environment:
+      CAPINDE_HOST: 0.0.0.0
+    volumes:
+      - ./shared_assets:/out
