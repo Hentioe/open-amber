@@ -1,6 +1,6 @@
 services:
   capinde:
-    image: hentioe/capinde:0.1.0-dev
+    image: ${OPEN_AMBER_CAPINDE_IMAGE:-hentioe/capinde:0.1.0-dev}
     restart: always
     ports:
       - 8080:8080
