@@ -36,6 +36,7 @@ declare namespace ServerData {
 
   type Captcha = {
     url: string;
+    uniqueId: string;
   };
 
   type RandomCode = {
@@ -63,4 +64,8 @@ declare namespace ServerData {
 }
 
 declare namespace InputData {
+  type Captcha = {
+    text: string;
+    uniqueId: string;
+  };
 }

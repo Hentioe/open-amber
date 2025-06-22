@@ -54,7 +54,8 @@ declare namespace DB {
 declare namespace Captcha {
   type LocalData = {
     text: string;
-    fileName: string; // svg image data
+    fileName: string;
+    uniqueId: string;
   };
 
   type LocalGenParams = {

@@ -16,8 +16,8 @@ export default () => {
   const [home, setHome] = createSignal<string>("");
   const [owner, setOwner] = createSignal<string>("");
   const [info, setInfo] = createSignal<string>("");
-  const [captchaCode, setCaptchaCode] = createSignal<string>("");
-  const [captchaUrl, setCaptchaUrl] = createSignal<string | undefined>(undefined);
+  const [captchaText, setCaptchaText] = createSignal<string>("");
+  const [serverCaptcha, setServerCaptcha] = createSignal<ServerData.Captcha | null>(null);
   const [submiited, setSubmitted] = createSignal<ServerData.Submitted | undefined>(undefined);
   const [error, setError] = createSignal<string | undefined>(undefined);
   const [errorInput, setErrorInput] = createSignal<
@@ -52,7 +52,7 @@ export default () => {
 
   const handleCaptchaCodeChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    setCaptchaCode(target.value.trim());
+    setCaptchaText(target.value.trim());
   };
 
   const handleInput = (e: Event) => {
@@ -69,6 +69,11 @@ export default () => {
       alert("请填写完整信息");
       return;
     }
+    const captchaUniqueId = serverCaptcha()?.uniqueId;
+    if (!captchaUniqueId) {
+      alert("验证码还未加载，请刷新页面重试");
+      return;
+    }
 
     const resp = await submit({
       name: name(),
@@ -76,7 +81,7 @@ export default () => {
       home: home(),
       owner: owner(),
       info: info(),
-      captchaCode: captchaCode(),
+      captcha: { text: captchaText(), uniqueId: captchaUniqueId },
     });
 
     if (resp.success) {
@@ -90,7 +95,7 @@ export default () => {
           refresh();
           setError(undefined);
           setErrorInput(undefined);
-          setCaptchaCode("");
+          setCaptchaText("");
         }, 3000);
         message = message + "，重新加载中……";
         setError(message);
@@ -123,7 +128,7 @@ export default () => {
 
     if (resp.success) {
       setSiteId(resp.payload.siteId);
-      setCaptchaUrl(resp.payload.captcha.url);
+      setServerCaptcha(resp.payload.captcha);
       setIsPreparing(true);
     } else {
       if (resp.reason === "RECORD_EXISTS") {
@@ -134,7 +139,7 @@ export default () => {
         setOwner(payload.siteOwner);
         setInfo(payload.siteInfo || "");
         setSiteId(payload.siteId.toString().padStart(8, "0"));
-        setCaptchaUrl(undefined);
+        setServerCaptcha(null);
       }
 
       setError(resp.message);
@@ -234,7 +239,7 @@ export default () => {
               placeholder="输入验证代码"
               onChange={handleCaptchaCodeChange}
               onInput={handleInput}
-              value={captchaCode()}
+              value={captchaText()}
               errorInput={errorInput()}
             />
             <div
@@ -247,13 +252,13 @@ export default () => {
                 <Match when={error()}>
                   <p class="text-yellow-400">{error()}</p>
                 </Match>
-                <Match when={!submiited() && captchaUrl()}>
-                  <img src={captchaUrl()} />
+                <Match when={!submiited() && serverCaptcha()}>
+                  <img src={serverCaptcha()?.url} />
                 </Match>
                 <Match when={submiited()}>
-                  <p class="text-green-400">{submiited()?.message}</p>
+                  <p class="text-green-500">{submiited()?.message}</p>
                 </Match>
-                <Match when={captchaUrl() === undefined}>
+                <Match when={serverCaptcha() === undefined}>
                   <p class="text-sm text-zinc-400">加载中……</p>
                 </Match>
               </Switch>

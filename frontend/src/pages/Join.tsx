@@ -12,8 +12,8 @@ import { setTitle } from "../state/meta";
 export default () => {
   const [siteId, setSiteId] = createSignal<string>("00000000");
   const [email, setEmail] = createSignal<string>("");
-  const [captchaCode, setCaptchaCode] = createSignal<string>("");
-  const [captchaUrl, setCaptchaUrl] = createSignal<string | undefined>(undefined);
+  const [serverCaptcha, setServerCaptcha] = createSignal<ServerData.Captcha | null>(null);
+  const [captchaText, setCaptchaText] = createSignal<string>("");
   const [submiited, setSubmitted] = createSignal<ServerData.SubmittedUnverified | undefined>(undefined);
   const [error, setError] = createSignal<string | undefined>(undefined);
   const [errorInput, setErrorInput] = createSignal<"email" | "captcha_code" | undefined>(undefined);
@@ -26,7 +26,7 @@ export default () => {
 
   const handleCaptchaChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    setCaptchaCode(target.value);
+    setCaptchaText(target.value);
   };
 
   const handleEmailInput = () => {
@@ -38,15 +38,21 @@ export default () => {
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
-    if (siteId().trim() === "" || email().trim() === "" || captchaCode().trim() === "") {
+
+    if (siteId().trim() === "" || email().trim() === "" || captchaText().trim() === "") {
       alert("请填写完整信息");
+      return;
+    }
+    const captchaUniqueId = serverCaptcha()?.uniqueId;
+    if (!captchaUniqueId) {
+      alert("验证码还未加载，请刷新页面重试");
       return;
     }
 
     const resp = await submitUnverified({
       siteId: siteId(),
       email: email(),
-      captchaCode: captchaCode(),
+      captcha: { text: captchaText(), uniqueId: captchaUniqueId },
     });
 
     if (resp.success) {
@@ -60,7 +66,7 @@ export default () => {
           refresh();
           setError(undefined);
           setErrorInput(undefined);
-          setCaptchaCode("");
+          setCaptchaText("");
         }, 3000);
         message = message + "，重新加载中……";
       } else if (resp.reason === "EMAIL_INVALID") {
@@ -85,7 +91,7 @@ export default () => {
 
     if (resp.success) {
       setSiteId(resp.payload.siteId);
-      setCaptchaUrl(resp.payload.captcha.url);
+      setServerCaptcha(resp.payload.captcha);
       setIsPreparing(true);
     } else {
       setError(resp.message);
@@ -144,7 +150,7 @@ export default () => {
               disabled={!!submiited()}
               placeholder="输入验证代码"
               onChange={handleCaptchaChange}
-              value={captchaCode()}
+              value={captchaText()}
               errorInput={errorInput()}
             />
             <div
@@ -157,19 +163,19 @@ export default () => {
                 <Match when={error()}>
                   <p class="text-yellow-400">{error()}</p>
                 </Match>
-                <Match when={!submiited() && captchaUrl()}>
-                  <img src={captchaUrl()} />
+                <Match when={!submiited() && serverCaptcha()}>
+                  <img src={serverCaptcha()?.url} />
                 </Match>
                 <Match when={submiited()}>
                   <div class="text-center">
-                    <p class="text-green-400">{submiited()?.message}</p>
-                    <p class="text-yellow-400 mt-[0.5rem] text-sm">
+                    <p class="text-green-500">{submiited()?.message}</p>
+                    <p class="text-yellow-500 mt-[0.5rem] text-sm">
                       <span>留意邮件发送者：</span>
                       <span class="font-sans">{submiited()?.sender}</span>
                     </p>
                   </div>
                 </Match>
-                <Match when={captchaUrl() === undefined}>
+                <Match when={serverCaptcha() === undefined}>
                   <p class="text-sm text-zinc-400">加载中……</p>
                 </Match>
               </Switch>

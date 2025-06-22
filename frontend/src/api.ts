@@ -28,22 +28,43 @@ export async function getSubmitUnverifiedPrepare(): PayloadType<ServerData.Rando
 }
 
 export async function submitUnverified(
-  { siteId, email, captchaCode }: { siteId: string; email: string; captchaCode: string },
+  { siteId, email, captcha }: { siteId: string; email: string; captcha: InputData.Captcha },
 ): PayloadType<ServerData.SubmittedUnverified> {
-  return strictify(await api.post("/submit/unverified", { site_id: siteId, email, captcha_code: captchaCode }));
+  return strictify(
+    await api.post("/submit/unverified", {
+      site_id: siteId,
+      email,
+      captcha: {
+        text: captcha.text,
+        unique_id: captcha.uniqueId,
+      },
+    }),
+  );
 }
 
 export async function submit(
-  { name, domain, home, owner, info, captchaCode }: {
+  { name, domain, home, owner, info, captcha }: {
     name: string;
     domain: string;
     home: string;
     owner: string;
     info: string;
-    captchaCode: string;
+    captcha: InputData.Captcha;
   },
 ): PayloadType<ServerData.Submitted> {
-  return strictify(await api.post("/submit", { name, domain, home, owner, info, captcha_code: captchaCode }));
+  return strictify(
+    await api.post("/submit", {
+      name,
+      domain,
+      home,
+      owner,
+      info,
+      captcha: {
+        text: captcha.text,
+        unique_id: captcha.uniqueId,
+      },
+    }),
+  );
 }
 
 export async function getSubmitPrepare(): PayloadType<ServerData.SubmitPrepare> {

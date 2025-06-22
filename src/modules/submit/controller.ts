@@ -49,7 +49,7 @@ const prepareApis = new Elysia()
       ttlSecs: config.CAPTCHA_TTL,
     });
 
-    cache.set(cache.keygen("cap", siteId), captchaData.text, 1000 * config.CAPTCHA_TTL);
+    cache.set(cache.keygen("cap", captchaData.uniqueId), captchaData.text, 1000 * config.CAPTCHA_TTL);
 
     return success(renderPrepare(siteId, captchaData));
   })
@@ -77,7 +77,7 @@ const prepareApis = new Elysia()
         ttlSecs: config.CAPTCHA_TTL,
       });
 
-      cache.set(cache.keygen("cap", profile.siteId), captchaData.text, 1000 * config.CAPTCHA_TTL);
+      cache.set(cache.keygen("cap", captchaData.uniqueId), captchaData.text, 1000 * config.CAPTCHA_TTL);
 
       return success(renderPrepare(profile.siteId, captchaData));
     } else {
@@ -89,13 +89,13 @@ export default new Elysia()
   .use(myJwt)
   .use(prepareApis)
   .post("/api/submit/unverified", async ({ myJwt, body }) => {
-    if (captcha.verify(body.site_id, body.captcha_code)) {
+    if (captcha.verify(body.captcha.unique_id, body.captcha.text)) {
       // 检查邮箱格式是否正确
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
         return failure("邮箱格式不正确", { reason: "EMAIL_INVALID" });
       }
       // 验证成功删除验证码缓存
-      cache.del(cache.keygen("cap", body.site_id));
+      cache.del(cache.keygen("cap", body.captcha.unique_id));
 
       // 生成 token
       const token = await myJwt.sign({
@@ -122,7 +122,10 @@ export default new Elysia()
     body: t.Object({
       site_id: t.String(),
       email: t.String(),
-      captcha_code: t.String(),
+      captcha: t.Object({
+        text: t.String(),
+        unique_id: t.String(),
+      }),
     }),
   })
   .get("/submit/verify", async ({ myJwt, query, redirect, cookie: { auth } }) => {
@@ -164,7 +167,7 @@ export default new Elysia()
     const profile = await myJwt.verify(auth?.value) as JWT.SubmitOptions | false;
 
     if (profile) {
-      if (!captcha.verify(profile.siteId, body.captcha_code)) {
+      if (!captcha.verify(body.captcha.unique_id, body.captcha.text)) {
         return failure("验证码输入错误或已过期", { reason: "CAPTCHA_INVALID" });
       }
 
@@ -172,7 +175,7 @@ export default new Elysia()
       if (checkedError) return checkedError;
 
       // 验证成功删除验证码缓存
-      cache.del(cache.keygen("cap", profile.siteId));
+      cache.del(cache.keygen("cap", body.captcha.unique_id));
       // 创建一个未审核的 record
       const result = createRecord({
         siteId: profile.siteId,
@@ -233,6 +236,9 @@ export default new Elysia()
       home: t.String(),
       owner: t.String(),
       info: t.Optional(t.String()),
-      captcha_code: t.String(),
+      captcha: t.Object({
+        text: t.String(),
+        unique_id: t.String(),
+      }),
     }),
   });
