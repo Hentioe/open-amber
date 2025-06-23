@@ -20,7 +20,8 @@ services:
       - ./data:/home/open-amber/data
       - ./shared_assets:/home/open-amber/shared_assets
     depends_on:
-      - capinde
+      capinde:
+        condition: service_healthy
 
   capinde:
     image: hentioe/capinde:0.1.0-dev
@@ -29,3 +30,8 @@ services:
       CAPINDE_HOST: 0.0.0.0
     volumes:
       - ./shared_assets:/out
+    healthcheck:
+      test: ["CMD", "capinde", "--healthcheck"]
+      interval: 3s
+      timeout: 1s
+      retries: 3
