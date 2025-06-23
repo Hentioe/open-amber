@@ -256,7 +256,7 @@ export default () => {
                   <img src={serverCaptcha()?.url} />
                 </Match>
                 <Match when={submiited()}>
-                  <p class="text-green-500">{submiited()?.message}</p>
+                  <p class="text-green-300">{submiited()?.message}</p>
                 </Match>
                 <Match when={serverCaptcha() === undefined}>
                   <p class="text-sm text-zinc-400">加载中……</p>

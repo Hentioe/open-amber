@@ -168,8 +168,8 @@ export default () => {
                 </Match>
                 <Match when={submiited()}>
                   <div class="text-center">
-                    <p class="text-green-500">{submiited()?.message}</p>
-                    <p class="text-yellow-500 mt-[0.5rem] text-sm">
+                    <p class="text-green-300">{submiited()?.message}</p>
+                    <p class="text-yellow-300 mt-[0.5rem] text-sm">
                       <span>留意邮件发送者：</span>
                       <span class="font-sans">{submiited()?.sender}</span>
                     </p>
