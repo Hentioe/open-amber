@@ -1,16 +1,16 @@
 import { customType } from "drizzle-orm/sqlite-core";
 import { decrypt, encrypt } from ".";
 
-export default customType<{ data: string; driverData: string }>({
+export default customType<{ data: string; driverData: Buffer }>({
   dataType() {
-    return "text";
+    return "blob";
   },
 
   toDriver(plainText: string) {
     return encrypt(plainText);
   },
 
-  fromDriver(packed: string) {
+  fromDriver(packed: Buffer) {
     return decrypt(packed);
   },
 });

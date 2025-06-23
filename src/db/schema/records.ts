@@ -1,6 +1,6 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { encrypted } from "../.";
 import { timestames } from "../helper";
+import { encrypted } from "../types";
 
 export default sqliteTable("records", {
   id: integer().primaryKey(),

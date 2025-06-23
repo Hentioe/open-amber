@@ -41,6 +41,16 @@ declare namespace Model {
     insertedAt?: Date;
     updatedAt?: Date;
   };
+
+  type UpdateRecord = {
+    siteName?: string;
+    siteHome?: string;
+    siteOwner?: string;
+    siteInfo?: string | null;
+    ownerEmail?: string;
+    siteStatus?: SiteStatus;
+    reviewStatus?: ReviewStatus;
+  };
 }
 
 declare namespace DB {

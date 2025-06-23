@@ -8,7 +8,7 @@ CREATE TABLE `records` (
 	`site_owner` text NOT NULL,
 	`site_status` text DEFAULT 'open' NOT NULL,
 	`site_modify` integer NOT NULL,
-	`owner_email` text NOT NULL,
+	`owner_email` blob NOT NULL,
 	`review_status` text DEFAULT 'pending' NOT NULL,
 	`inserted_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	`updated_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL

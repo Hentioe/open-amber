@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "737237a5-6be7-4dab-a656-d14685b99af0",
+  "id": "2fed3089-9db4-48d6-87d6-28846ebc22d4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "records": {
@@ -73,7 +73,7 @@
         },
         "owner_email": {
           "name": "owner_email",
-          "type": "text",
+          "type": "blob",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

@@ -1,6 +1,6 @@
 import { SQLiteError } from "bun:sqlite";
 import { desc, eq, or } from "drizzle-orm";
-import { Err, Ok } from "ts-results";
+import { Err, Ok, Result } from "ts-results";
 import db from "../../db";
 import { records } from "../../db/schema";
 import log from "../../log";
@@ -16,6 +16,8 @@ export function getRecordBy({ siteId, siteDomain }: { siteId?: string; siteDomai
   if (siteDomain) {
     query.where(eq(records.siteDomain, siteDomain));
   }
+  // 默认只查询已审核通过的记录
+  query.where(eq(records.reviewStatus, "approved"));
 
   return query.get();
 }
@@ -50,6 +52,26 @@ export function createRecord(record: Model.Record) {
   }
 }
 
+export function updateRecord(siteId: string, record: Model.UpdateRecord): Result<Model.Record, SQLiteError> {
+  try {
+    const created = db.update(records).set({
+      siteName: record.siteName,
+      siteHome: record.siteHome,
+      siteInfo: record.siteInfo,
+      siteOwner: record.siteOwner,
+      siteStatus: record.siteStatus,
+      ownerEmail: record.ownerEmail,
+      reviewStatus: record.reviewStatus,
+    })
+      .where(eq(records.siteId, siteId))
+      .returning().get();
+
+    return new Ok(created);
+  } catch (error) {
+    return new Err(error as SQLiteError);
+  }
+}
+
 export function updateRecordReviewStatus(id: number, reviewStatus: Model.ReviewStatus) {
   return db.update(records)
     .set({ reviewStatus, updatedAt: new Date() })
@@ -62,6 +84,13 @@ export function recentlyVerifiedRecords(limit: number = 50) {
     .from(records)
     .where(eq(records.reviewStatus, "approved"))
     .orderBy(desc(records.siteModify))
+    .limit(limit).all();
+}
+
+export function getRecords(limit: number = 50) {
+  return db.select()
+    .from(records)
+    .orderBy(desc(records.insertedAt))
     .limit(limit).all();
 }
 
@@ -88,5 +117,5 @@ export function deleteRecordBy({ siteId, siteDomain }: { siteId?: string; siteDo
     base.where(eq(records.siteDomain, siteDomain));
   }
 
-  return base.returning().run();
+  return base.returning().get();
 }
