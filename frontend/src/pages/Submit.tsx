@@ -258,8 +258,8 @@ export default () => {
                 <Match when={submiited()}>
                   <p class="text-green-300">{submiited()?.message}</p>
                 </Match>
-                <Match when={serverCaptcha() === undefined}>
-                  <p class="text-sm text-zinc-400">加载中……</p>
+                <Match when={!serverCaptcha()}>
+                  <p class="text-sm text-zinc-300">加载中……</p>
                 </Match>
               </Switch>
             </div>
