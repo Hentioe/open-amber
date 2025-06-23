@@ -39,17 +39,17 @@ export default () => {
     <main class="min-h-screen flex justify-center text-white">
       <div class="w-full md:w-[60rem] mx-[1rem] md:mx-0 flex flex-col gap-[1rem] mb-[5rem]">
         <div
-          class="w-full h-[15rem] md:h-[40rem] mt-[1rem] rounded overflow-hidden bg-full-center flex "
+          class="w-full h-[14.3rem] md:h-[40rem] mt-[1rem] rounded overflow-hidden bg-full-center flex "
           style={{ "background-image": "url(/images/banner-1080.avif)" }}
         >
           <div class="w-full mt-[1rem] md:mt-[8rem]">
-            <h2 class="text-[2rem] md:text-[5rem] text-center text-[#C86941] font-bold tracking-wider">
+            <h2 class="text-[1.5rem] md:text-[5rem] text-center text-[#C86941] font-bold tracking-wider">
               这里是喵备导航
             </h2>
-            <p class="mt-0 md:mt-[0.5rem] text-base md:text-2xl text-center text-[#C86941] font-medium md:font-bold tracking-wider">
+            <p class="mt-0 md:mt-[0.5rem] text-sm md:text-2xl text-center text-[#C86941] font-medium md:font-bold tracking-wider">
               向喵星人展示地球的知识和智慧
             </p>
-            <div class="mt-1 md:mt-[1rem] flex justify-center gap-[0.5rem] md:gap-[2rem] text-base md:text-[2rem] text-zinc-500 *:cursor-pointer">
+            <div class="mt-1 md:mt-[1rem] flex justify-center gap-[1rem] md:gap-[2rem] text-base md:text-[2rem] text-zinc-500 *:hover:text-zinc-600 *:cursor-pointer">
               <a href="https://github.com/Hentioe/open-amber" target="_blank">
                 <AiFillGithub />
               </a>
@@ -65,7 +65,7 @@ export default () => {
             </div>
             <div class="mt-2 md:mt-[1rem] text-center">
               <a href="https://blog.hentioe.dev/posts/miaoxing-icp.html" target="_blank">
-                <button class="py-[0.25rem] md:py-[0.5rem] px-[1rem] md:px-[2rem] bg-[#61A58F] rounded-full text-white font-bold text-base md:text-2xl cursor-pointer">
+                <button class="py-[0.25rem] md:py-[0.5rem] px-[1rem] md:px-[2rem] bg-[#61A58F] hover:bg-[#79b2a0] rounded-full text-white font-bold text-sm md:text-2xl cursor-pointer">
                   了解更多
                 </button>
               </a>
