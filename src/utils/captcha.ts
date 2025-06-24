@@ -1,7 +1,7 @@
 import { cache } from ".";
 
-export function verify(siteId: string, input: string): boolean {
-  const code = cache.get<string>(cache.keygen("cap", siteId));
+export function verify(uniqueId: string, input: string): boolean {
+  const code = cache.get<string>(cache.keygen("cap", uniqueId));
   if (code) {
     return code.toUpperCase() === input.toUpperCase();
   }

@@ -12,7 +12,7 @@ export default new Elysia()
     return success(renderRecords(result));
   })
   .get("/api/records/:siteId", ({ params }) => {
-    const record = getRecordBy({ siteId: params.siteId });
+    const record = getRecordBy({ siteId: params.siteId, onlyApproved: true });
 
     if (record) {
       return success(renderRecord(record));

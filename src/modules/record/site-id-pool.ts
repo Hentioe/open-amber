@@ -56,10 +56,12 @@ class SiteIdPool {
       const siteId = gen();
       // 检查 siteId 是否在池中
       if (this.pool.has(siteId)) {
+        log.warn(`Site ID ${siteId} already exists in the pool, skipping...`);
         continue; // 如果已存在，跳过
       }
       // 检查 siteId 是否在外部存在
       if (checkExists(siteId)) {
+        log.warn(`Site ID ${siteId} already exists in the database, skipping...`);
         continue; // 如果已存在，跳过
       }
       // 添加到池中
@@ -78,10 +80,6 @@ function gen() {
 function checkExists(siteId: string) {
   // 查找是否存在此 siteId 的 record
   if (getRecordBy({ siteId })) {
-    return true; // 存在
-  }
-  // 查找是否存在此 siteId 的缓存
-  if (cache.get(cache.keygen("cap", siteId))) {
     return true; // 存在
   }
 

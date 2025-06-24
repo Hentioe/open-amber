@@ -5,7 +5,7 @@ import db from "../../db";
 import { records } from "../../db/schema";
 import log from "../../log";
 
-export function getRecordBy({ siteId, siteDomain }: { siteId?: string; siteDomain?: string }) {
+export function getRecordBy({ siteId, siteDomain, onlyApproved }: { siteId?: string; siteDomain?: string, onlyApproved?: boolean }) {
   if (!Boolean(siteId) && !Boolean(siteDomain)) {
     return undefined;
   }
@@ -16,8 +16,9 @@ export function getRecordBy({ siteId, siteDomain }: { siteId?: string; siteDomai
   if (siteDomain) {
     query.where(eq(records.siteDomain, siteDomain));
   }
-  // 默认只查询已审核通过的记录
-  query.where(eq(records.reviewStatus, "approved"));
+  if (onlyApproved) {
+    query.where(eq(records.reviewStatus, "approved"));
+  }
 
   return query.get();
 }

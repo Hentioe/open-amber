@@ -5,6 +5,8 @@ import { failure, success } from "../../helpers";
 import { createRecord, deleteRecordBy, getRecords, updateRecord } from "../record";
 import { renderRecord, renderRecords } from "./view";
 
+const reviewStatusField = t.Optional(t.Union([t.Literal("pending"), t.Literal("approved"), t.Literal("rejected")]));
+
 const createRecordBody = t.Object({
   site_id: t.String(),
   site_name: t.String(),
@@ -13,6 +15,7 @@ const createRecordBody = t.Object({
   site_owner: t.String(),
   site_info: t.Optional(t.String()),
   owner_email: t.String(),
+  review_status: reviewStatusField,
 });
 
 const updateRecordBody = t.Object({
@@ -23,7 +26,7 @@ const updateRecordBody = t.Object({
   site_info: t.Optional(t.String()),
   owner_email: t.Optional(t.String()),
   site_status: t.Optional(t.String()),
-  review_status: t.Optional(t.Union([t.Literal("pending"), t.Literal("approved"), t.Literal("rejected")])),
+  review_status: reviewStatusField,
 });
 
 export default new Elysia()
@@ -50,7 +53,7 @@ export default new Elysia()
       siteStatus: "open",
       siteModify: new Date(),
       ownerEmail: body.owner_email,
-      reviewStatus: "pending",
+      reviewStatus: body.review_status || "pending",
     });
 
     if (result.ok) {
