@@ -1,4 +1,7 @@
 import { useNavigate } from "@solidjs/router";
+import { AiFillGithub } from "solid-icons/ai";
+import { FaBrandsBloggerB, FaSolidPlaceOfWorship } from "solid-icons/fa";
+import { IoDocumentText } from "solid-icons/io";
 import { createSignal, Match, onMount, Switch } from "solid-js";
 import { searchRecord } from "../api";
 import BottomNav from "../components/BottomNav";
@@ -64,6 +67,22 @@ export default () => {
             </Match>
             <Match when={searchError()}>
               <p class="text-red-400">{searchError()}</p>
+            </Match>
+            <Match when={true}>
+              <div class="flex items-center gap-[2rem] text-xl md:text-2xl">
+                <a href="https://github.com/Hentioe/open-amber" target="_blank">
+                  <AiFillGithub />
+                </a>
+                <a href="https://blog.hentioe.dev/" target="_blank">
+                  <FaBrandsBloggerB />
+                </a>
+                <a>
+                  <FaSolidPlaceOfWorship />
+                </a>
+                <a href="https://blog.hentioe.dev/posts/open-amber.html" target="_blank">
+                  <IoDocumentText />
+                </a>
+              </div>
             </Match>
           </Switch>
         </div>

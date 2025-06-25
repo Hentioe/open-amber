@@ -59,7 +59,7 @@ export default () => {
               <a>
                 <FaSolidPlaceOfWorship />
               </a>
-              <a>
+              <a href="https://blog.hentioe.dev/posts/open-amber.html" target="_blank">
                 <IoDocumentText />
               </a>
             </div>
