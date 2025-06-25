@@ -1,24 +1,28 @@
 import { SQLiteError } from "bun:sqlite";
-import { desc, eq, or } from "drizzle-orm";
+import { and, desc, eq, or } from "drizzle-orm";
 import { Err, Ok, Result } from "ts-results";
 import db from "../../db";
 import { records } from "../../db/schema";
 import log from "../../log";
 
-export function getRecordBy({ siteId, siteDomain, onlyApproved }: { siteId?: string; siteDomain?: string, onlyApproved?: boolean }) {
+export function getRecordBy(
+  { siteId, siteDomain, onlyApproved }: { siteId?: string; siteDomain?: string; onlyApproved?: boolean },
+) {
   if (!Boolean(siteId) && !Boolean(siteDomain)) {
     return undefined;
   }
-  const query = db.select().from(records);
+  const conditions = [];
   if (siteId) {
-    query.where(eq(records.siteId, siteId));
+    conditions.push(eq(records.siteId, siteId));
   }
   if (siteDomain) {
-    query.where(eq(records.siteDomain, siteDomain));
+    conditions.push(eq(records.siteDomain, siteDomain));
   }
   if (onlyApproved) {
-    query.where(eq(records.reviewStatus, "approved"));
+    conditions.push(eq(records.reviewStatus, "approved"));
   }
+
+  const query = db.select().from(records).where(and(...conditions));
 
   return query.get();
 }
