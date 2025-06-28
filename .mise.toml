@@ -32,6 +32,12 @@ run = "docker compose -f docker-compose.dev.yml"
 depends = ["frontend-build", "backend-build"]
 
 [tasks.lint]
+depends = ["lint-backend", "lint-frontend"]
+
+[tasks.lint-backend]
+run = "bun run lint"
+
+[tasks.lint-frontend]
 run = "pnpm --prefix frontend lint"
 
 [tasks.format]

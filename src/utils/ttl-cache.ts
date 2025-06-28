@@ -21,7 +21,7 @@ export function get<T>(key: string): T | undefined {
   return cache.get<T>(key);
 }
 
-export function set(key: string, value: any, ttlMs: number) {
+export function set(key: string, value: unknown, ttlMs: number) {
   cache.set(key, value, { ttlMs });
 }
 

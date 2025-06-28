@@ -7,7 +7,7 @@ export function checkFields(fields: {
   owner: string;
 }): Api.Error | false {
   // 检查域名格式
-  if (!/^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,63})+$/.test(fields.domain)) {
+  if (!/^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,63})+$/.test(fields.domain)) {
     return failure("域名格式不正确", { reason: "DOMAIN_INVALID" });
   }
   // 检查主页地址是否超过 255 字符

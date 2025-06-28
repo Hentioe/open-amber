@@ -1,5 +1,4 @@
 import log from "../../log";
-import { cache } from "../../utils";
 import { getRecordBy } from ".";
 
 class SiteIdPool {

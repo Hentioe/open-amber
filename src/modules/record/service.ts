@@ -8,7 +8,7 @@ import log from "../../log";
 export function getRecordBy(
   { siteId, siteDomain, onlyApproved }: { siteId?: string; siteDomain?: string; onlyApproved?: boolean },
 ) {
-  if (!Boolean(siteId) && !Boolean(siteDomain)) {
+  if (!siteId && !siteDomain) {
     return undefined;
   }
   const conditions = [];
@@ -111,7 +111,7 @@ export function findRecord(keyword: string) {
 }
 
 export function deleteRecordBy({ siteId, siteDomain }: { siteId?: string; siteDomain?: string }) {
-  if (!Boolean(siteId) && !Boolean(siteDomain)) {
+  if (!siteId && !siteDomain) {
     return;
   }
 

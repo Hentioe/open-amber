@@ -4,12 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development bun --watch src/main.ts",
-    "build": "bun run build.ts"
+    "build": "bun run build.ts",
+    "lint": "eslint --report-unused-disable-directives --max-warnings 0"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "bun-plugin-pino": "^1.4.0",
-    "drizzle-kit": "^0.31.1"
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^9.30.0",
+    "typescript-eslint": "^8.35.0"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
