@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build --mode production",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint src/ --report-unused-disable-directives --max-warnings 0",
-    "format": "dprint fmt"
+    "lint": "eslint --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
@@ -27,7 +26,6 @@
     "@tailwindcss/vite": "^4.1.10",
     "@typescript-eslint/eslint-plugin": "^8.34.0",
     "@typescript-eslint/parser": "^8.34.0",
-    "concurrently": "^9.1.2",
     "eslint": "^9.28.0",
     "eslint-plugin-solid": "^0.14.5",
     "tailwindcss": "^4.1.10",
