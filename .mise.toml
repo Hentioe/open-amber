@@ -25,7 +25,7 @@ run = "pnpm --prefix frontend build"
 [tasks.backend-build]
 run = "bun run build"
 
-[tasks.deps-env]
+[tasks.env-deps]
 run = "docker compose -f docker-compose.dev.yml"
 
 [tasks.build]
