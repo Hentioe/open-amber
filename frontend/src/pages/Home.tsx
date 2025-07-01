@@ -86,6 +86,9 @@ export default () => {
             </Match>
           </Switch>
         </div>
+        <p class="px-[2rem] text-center text-base md:text-lg text-yellow-300 font-meow tracking-wide">
+          由于 <span class="underline">7 月 1 日</span>前线上环境的邮箱配置有误，该时间前提交过的人请重新提交：（
+        </p>
         <BottomNav />
       </div>
     </main>
