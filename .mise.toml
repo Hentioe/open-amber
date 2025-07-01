@@ -49,5 +49,8 @@ depends = ["format", "lint"]
 [tasks.test]
 run = "bun test"
 
+[tasks.bye]
+run = "mise run env-deps stop"
+
 [tasks.clean]
 run = "rm -rf public dist node_modules frontend/node_modules data"
