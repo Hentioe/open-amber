@@ -6,6 +6,7 @@ import config from "../../config";
 import { failure, success } from "../../helpers";
 import log from "../../log";
 import { cache, capinde, captcha } from "../../utils";
+import { captchaErrorMessage } from "../../utils/captcha";
 import recend from "../../utils/recend";
 import { createRecord, getRecordBy, siteIdPool } from "../record";
 import { renderRecord } from "../record/view";
@@ -38,7 +39,7 @@ const prepareApis = new Elysia()
   .use(myJwt)
   .get("/api/submit/unverified/prepare", async () => {
     const siteId = siteIdPool.getSiteId();
-    const captchaData = await capinde.createLocal({
+    const result = await capinde.createLocal({
       baseDir: "/out",
       baseParams: {
         length: 5,
@@ -49,9 +50,13 @@ const prepareApis = new Elysia()
       ttlSecs: config.CAPTCHA_TTL,
     });
 
-    cache.set(cache.keygen("cap", captchaData.uniqueId), captchaData.text, 1000 * config.CAPTCHA_TTL);
+    if (result.ok) {
+      cache.set(cache.keygen("cap", result.val.uniqueId), result.val.text, 1000 * config.CAPTCHA_TTL);
 
-    return success(renderPrepare(siteId, captchaData));
+      return success(renderPrepare(siteId, result.val));
+    } else {
+      return failure(captchaErrorMessage(result.val));
+    }
   })
   .get("/api/submit/prepare", async ({ myJwt, cookie: { auth } }) => {
     const profile = await myJwt.verify(auth?.value) as { email: string; siteId: string } | false;
@@ -66,7 +71,7 @@ const prepareApis = new Elysia()
         });
       }
 
-      const captchaData = await capinde.createLocal({
+      const result = await capinde.createLocal({
         baseDir: "/out",
         baseParams: {
           length: 4,
@@ -77,9 +82,13 @@ const prepareApis = new Elysia()
         ttlSecs: config.CAPTCHA_TTL,
       });
 
-      cache.set(cache.keygen("cap", captchaData.uniqueId), captchaData.text, 1000 * config.CAPTCHA_TTL);
+      if (result.ok) {
+        cache.set(cache.keygen("cap", result.val.uniqueId), result.val.text, 1000 * config.CAPTCHA_TTL);
 
-      return success(renderPrepare(profile.siteId, captchaData));
+        return success(renderPrepare(profile.siteId, result.val));
+      } else {
+        return failure(captchaErrorMessage(result.val));
+      }
     } else {
       return failure("未找到提交者信息，请从邮箱验证");
     }

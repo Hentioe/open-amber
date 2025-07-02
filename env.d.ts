@@ -80,6 +80,15 @@ declare namespace Captcha {
     };
     ttlSecs?: number;
   };
+
+  type Error = ErrorPayload | RemoteError;
+
+  type ErrorPayload = {
+    message: string;
+    status: number;
+  };
+
+  type RemoteError = "REMOTE_ERROR";
 }
 
 declare namespace JWT {

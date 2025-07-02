@@ -1,8 +1,10 @@
+import { Err, Ok, type Result } from "ts-results";
 import config from "../config";
 import { strictify } from "../helpers";
-import log from "../log";
 
-export async function createLocal(params: Captcha.LocalGenParams) {
+export async function createLocal(
+  params: Captcha.LocalGenParams,
+): Promise<Result<Captcha.LocalData, Captcha.Error>> {
   let base_params = {};
   if (params.baseParams) {
     const { length, width, height, darkMode: dark_mode, complexity, compression } = params.baseParams;
@@ -23,14 +25,14 @@ export async function createLocal(params: Captcha.LocalGenParams) {
     headers: { "Content-Type": "application/json" },
   });
 
-  if (resp.status !== 200) {
-    if (resp.status !== 500) {
-      const error = await resp.json() as { message: string };
-      log.error(`Failed to create CAPTCHA: ${error.message}, status: ${resp.status}`);
-    } else {
-      log.error(`Failed to create CAPTCHA, status: ${resp.status}`);
-    }
-  }
+  switch (resp.status) {
+    case 200:
+      return Ok(strictify<Captcha.LocalData>(await resp.json()));
 
-  return strictify<Captcha.LocalData>(await resp.json());
+    case 500:
+      return Err("REMOTE_ERROR");
+
+    default:
+      return Err(await resp.json() as Captcha.ErrorPayload);
+  }
 }
