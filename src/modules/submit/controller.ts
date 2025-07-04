@@ -39,8 +39,7 @@ const prepareApis = new Elysia()
   .use(myJwt)
   .get("/api/submit/unverified/prepare", async () => {
     const siteId = siteIdPool.getSiteId();
-    const result = await capinde.createLocal({
-      baseDir: "/out",
+    const result = await capinde.generate({
       baseParams: {
         length: 5,
         width: 150,
@@ -51,7 +50,7 @@ const prepareApis = new Elysia()
     });
 
     if (result.ok) {
-      cache.set(cache.keygen("cap", result.val.uniqueId), result.val.text, 1000 * config.CAPTCHA_TTL);
+      cache.set(cache.keygen("cap", result.val.uniqueId), result.val.specialPayload.text, 1000 * config.CAPTCHA_TTL);
 
       return success(renderPrepare(siteId, result.val));
     } else {
@@ -71,8 +70,7 @@ const prepareApis = new Elysia()
         });
       }
 
-      const result = await capinde.createLocal({
-        baseDir: "/out",
+      const result = await capinde.generate({
         baseParams: {
           length: 4,
           width: 150,
@@ -83,7 +81,7 @@ const prepareApis = new Elysia()
       });
 
       if (result.ok) {
-        cache.set(cache.keygen("cap", result.val.uniqueId), result.val.text, 1000 * config.CAPTCHA_TTL);
+        cache.set(cache.keygen("cap", result.val.uniqueId), result.val.specialPayload.text, 1000 * config.CAPTCHA_TTL);
 
         return success(renderPrepare(profile.siteId, result.val));
       } else {

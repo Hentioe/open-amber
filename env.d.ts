@@ -62,14 +62,17 @@ declare namespace DB {
 }
 
 declare namespace Captcha {
-  type LocalData = {
-    text: string;
+  type SuccessPayload = {
     fileName: string;
     uniqueId: string;
+    specialPayload: {
+      type: "text";
+      text: string;
+    };
   };
 
-  type LocalGenParams = {
-    baseDir: string;
+  type Params = {
+    ttlSecs?: number;
     baseParams?: {
       length?: number;
       width?: number;
@@ -78,7 +81,6 @@ declare namespace Captcha {
       complexity?: number;
       compression?: number;
     };
-    ttlSecs?: number;
   };
 
   type Error = ErrorPayload | RemoteError;
