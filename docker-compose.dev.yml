@@ -5,6 +5,7 @@ services:
       - 8080:8080
     environment:
       CAPINDE_HOST: 0.0.0.0
+      CAPINDE_NAMESPACE_BASE: /namespace
     volumes:
-      - ./shared_assets:/out
+      - ./shared_assets:/namespace/out
  

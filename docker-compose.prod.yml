@@ -28,8 +28,9 @@ services:
     restart: always
     environment:
       CAPINDE_HOST: 0.0.0.0
+      CAPINDE_NAMESPACE_BASE: /namespace
     volumes:
-      - ./shared_assets:/out
+      - ./shared_assets:/namespace/out
     healthcheck:
       test: ["CMD", "capinde", "--healthcheck"]
       start_period: 3s
