@@ -43,8 +43,8 @@ run = "pnpm --prefix frontend lint"
 [tasks.format]
 run = "dprint fmt"
 
-[tasks.check]
-depends = ["format", "lint"]
+[tasks.prepare]
+depends = ["format", "lint", "test"]
 
 [tasks.test]
 run = "bun test"
