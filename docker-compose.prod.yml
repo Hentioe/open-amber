@@ -29,6 +29,7 @@ services:
     environment:
       CAPINDE_HOST: 0.0.0.0
       CAPINDE_NAMESPACE_BASE: /namespace
+      CAPINDE_WORKING_MODE: localized
     volumes:
       - ./shared_assets:/namespace/out
     healthcheck:

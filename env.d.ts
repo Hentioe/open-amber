@@ -63,10 +63,12 @@ declare namespace DB {
 
 declare namespace Captcha {
   type SuccessPayload = {
+    workingMode: "hosted" | "localized";
+    namespace: string;
     fileName: string;
     uniqueId: string;
     specialPayload: {
-      type: "text";
+      type: "classic";
       text: string;
     };
   };

@@ -6,6 +6,7 @@ services:
     environment:
       CAPINDE_HOST: 0.0.0.0
       CAPINDE_NAMESPACE_BASE: /namespace
+      CAPINDE_API_KEY: rpcYUmcu8GukNfHJbUqZWMKbeIrXHtkJpzwYdIeOsdCmZZikO+qEPESaXH6bTSpy
     volumes:
       - ./shared_assets:/namespace/out
  

@@ -12,6 +12,7 @@ const vars = {
   ENCRYPTION_KEY: envVar("OPEN_AMBER_ENCRYPTION_KEY", { enforce: true })!,
   ADMIN_API_KEY: envVar("OPEN_AMBER_ADMIN_API_KEY", { enforce: true })!,
   CAPINDE_BASE_URL: envVar("OPEN_AMBER_CAPINDE_BASE_URL", { fallback: fallbackCapindeBaseUrl() })!,
+  CAPINDE_API_KEY: envVar("OPEN_AMBER_CAPINDE_API_KEY", { enforce: false })!,
   RESEND_API_KEY: envVar("OPEN_AMBER_RESEND_API_KEY", { enforce: true })!,
   RESEND_SENDER: envVar("OPEN_AMBER_RESEND_SENDER", { fallback: "onboarding@resend.dev" })!,
 };

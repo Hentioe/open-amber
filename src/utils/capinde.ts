@@ -22,11 +22,14 @@ export async function generate(
   const resp = await fetch(`${config.CAPINDE_BASE_URL}/api/generate`, {
     method: "POST",
     body: JSON.stringify({
-      namespace: "/out",
+      namespace: "out",
       ttl_secs: params.ttlSecs,
       special_params: { type: "classic", ...base_params },
     }),
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${config.CAPINDE_API_KEY}`,
+    },
   });
 
   switch (resp.status) {
