@@ -1,6 +1,6 @@
 import config from "../../config";
 
-export function renderCaptcha(captcha: Captcha.SuccessPayload) {
+export function renderCaptcha(captcha: Captcha.Generated) {
   let url: string;
 
   if (captcha.workingMode == "hosted") {

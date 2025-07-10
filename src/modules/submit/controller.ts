@@ -5,7 +5,7 @@ import { rateLimit } from "elysia-rate-limit";
 import config from "../../config";
 import { failure, success } from "../../helpers";
 import log from "../../log";
-import { cache, capinde, captcha } from "../../utils";
+import { cache, capinde } from "../../utils";
 import { captchaErrorMessage } from "../../utils/captcha";
 import recend from "../../utils/recend";
 import { createRecord, getRecordBy, siteIdPool } from "../record";
@@ -26,7 +26,7 @@ const myJwt = jwt({
   exp: "1h", // 1 小时后过期
 });
 
-const prepareApis = new Elysia()
+const prepareRoutes = new Elysia()
   .use(rateLimit({
     duration: 1000,
     max: 1,
@@ -50,8 +50,6 @@ const prepareApis = new Elysia()
     });
 
     if (result.ok) {
-      cache.set(cache.keygen("cap", result.val.uniqueId), result.val.specialPayload.text, 1000 * config.CAPTCHA_TTL);
-
       return success(renderPrepare(siteId, result.val));
     } else {
       return failure(captchaErrorMessage(result.val));
@@ -81,8 +79,6 @@ const prepareApis = new Elysia()
       });
 
       if (result.ok) {
-        cache.set(cache.keygen("cap", result.val.uniqueId), result.val.specialPayload.text, 1000 * config.CAPTCHA_TTL);
-
         return success(renderPrepare(profile.siteId, result.val));
       } else {
         return failure(captchaErrorMessage(result.val));
@@ -94,15 +90,20 @@ const prepareApis = new Elysia()
 
 export default new Elysia()
   .use(myJwt)
-  .use(prepareApis)
+  .use(prepareRoutes)
   .post("/api/submit/unverified", async ({ myJwt, body }) => {
-    if (captcha.verify(body.captcha.unique_id, body.captcha.text)) {
+    const verifyResult = await capinde.verify({
+      uniqueId: body.captcha.unique_id,
+      answer: { text: body.captcha.text },
+    });
+    if (!verifyResult.ok) {
+      return failure(captchaErrorMessage(verifyResult.val));
+    }
+    if (verifyResult.val.ok) {
       // 检查邮箱格式是否正确
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
         return failure("邮箱格式不正确", { reason: "EMAIL_INVALID" });
       }
-      // 验证成功删除验证码缓存
-      cache.del(cache.keygen("cap", body.captcha.unique_id));
 
       // 生成 token
       const token = await myJwt.sign({
@@ -174,15 +175,20 @@ export default new Elysia()
     const profile = await myJwt.verify(auth?.value) as JWT.SubmitOptions | false;
 
     if (profile) {
-      if (!captcha.verify(body.captcha.unique_id, body.captcha.text)) {
+      const verifyResult = await capinde.verify({
+        uniqueId: body.captcha.unique_id,
+        answer: { text: body.captcha.text, ignoreCase: true },
+      });
+      if (!verifyResult.ok) {
+        return failure(captchaErrorMessage(verifyResult.val));
+      }
+      if (!verifyResult.val.ok) {
         return failure("验证码输入错误或已过期", { reason: "CAPTCHA_INVALID" });
       }
 
       const checkedError = checkFields(body);
       if (checkedError) return checkedError;
 
-      // 验证成功删除验证码缓存
-      cache.del(cache.keygen("cap", body.captcha.unique_id));
       // 创建一个未审核的 record
       const result = createRecord({
         siteId: profile.siteId,

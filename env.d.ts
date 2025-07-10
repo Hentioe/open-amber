@@ -62,7 +62,7 @@ declare namespace DB {
 }
 
 declare namespace Captcha {
-  type SuccessPayload = {
+  type Generated = {
     workingMode: "hosted" | "localized";
     namespace: string;
     fileName: string;
@@ -73,7 +73,7 @@ declare namespace Captcha {
     };
   };
 
-  type Params = {
+  type GenerateParams = {
     ttlSecs?: number;
     baseParams?: {
       length?: number;
@@ -83,6 +83,18 @@ declare namespace Captcha {
       complexity?: number;
       compression?: number;
     };
+  };
+
+  type VerfyParams = {
+    uniqueId: string;
+    answer: {
+      text: string;
+      ignoreCase?: boolean;
+    };
+  };
+
+  type VerifyResult = {
+    ok: boolean;
   };
 
   type Error = ErrorPayload | RemoteError;

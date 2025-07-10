@@ -29,6 +29,6 @@ export function del(key: string) {
   cache.delete(key);
 }
 
-export function keygen(prefix: "cap" | "unverified", value: string | number) {
+export function keygen(prefix: "unverified", value: string | number) {
   return `${prefix}-${value}`;
 }
