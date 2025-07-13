@@ -8,7 +8,8 @@ declare namespace Api {
     | "DOMAIN_INVALID"
     | "HOME_INVALID"
     | "INFO_INVALID"
-    | "OWNER_INVALID";
+    | "OWNER_INVALID"
+    | "REVIEW_PENDING";
 
   type Error = {
     success: false;

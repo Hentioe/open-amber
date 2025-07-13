@@ -2,7 +2,7 @@ import { useParams } from "@solidjs/router";
 import { useQuery } from "@tanstack/solid-query";
 import classNames from "classnames";
 import { format as formatDate, parseISO } from "date-fns";
-import { createEffect, createSignal, ErrorBoundary, JSX, onMount, Suspense } from "solid-js";
+import { createEffect, createSignal, ErrorBoundary, JSX, Match, onMount, Suspense, Switch } from "solid-js";
 import { getRecord } from "../api";
 import BottomNav from "../components/BottomNav";
 import { showJoin } from "../state/bottom-nav";
@@ -47,6 +47,28 @@ const renderSuccess = (record: ServerData.Record) => {
   );
 };
 
+const renderReviewPending = (siteId: string) => {
+  return (
+    <div>
+      <p class="text-center mt-[1.5rem] md:mt-[2rem] tracking-wide">
+        ✮喵备{siteId}号✮
+      </p>
+      <div class="my-[1rem] border-t border-zinc-300" />
+      <p class="text-center text-yellow-400 tracking-wide">喵星大使馆已收到此站点的备案申请，预计一周内处理此事项</p>
+      <p class="mt-[1rem] mb-[0.5rem] text-center">1. 请确保以下代码在您的网页中</p>
+      <pre class="mt-[1rem] overflow-x-auto text-center text-red-400 bg-black/40">
+        <code>
+          {`<a href="https://icp.hentioe.dev/sites/${siteId}" target="_blank">喵ICP备${siteId}号</a>`}
+        </code>
+      </pre>
+      <p class="my-[1rem] text-center">
+        2. 站点类型符合申请要求
+      </p>
+      <p class="text-center text-red-200">如果审核时间超过一个星期，可主动向我们发邮件催促。</p>
+    </div>
+  );
+};
+
 function renderStatus(status: string) {
   switch (status) {
     case "open":
@@ -76,6 +98,7 @@ function renderLoading() {
 
 export default () => {
   const params = useParams();
+  const [isReviewPending, setIsReviewPending] = createSignal(false);
   const [cardEl, setCardEl] = createSignal<HTMLDivElement | null>(null);
 
   const recordQuery = useQuery(() => ({
@@ -102,6 +125,9 @@ export default () => {
     } else {
       // 如果查询失败，设置标题为错误信息
       setTitle(recordQuery.data?.message);
+      if (recordQuery.data?.reason === "REVIEW_PENDING") {
+        setIsReviewPending(true);
+      }
     }
   });
 
@@ -116,20 +142,35 @@ export default () => {
         class={classNames([
           "w-full md:w-[42rem] backdrop-blur-md bg-white/15 shadow-strong rounded-xl my-[5rem]",
           "py-[1.5rem] px-[1rem] md:px-[4rem] h-[11rem] interpolate-allow-keywords transition-all overflow-hidden",
+          { "md:w-[60rem]!": isReviewPending(), "h-fit!": isReviewPending() },
         ])}
       >
         <header class="mb-[1.5rem]">
           <p class="text-center text-2xl md:text-3xl font-bold">
-            <Meow />星 ICP 备案
+            <Switch>
+              <Match when={isReviewPending()}>
+                <p class="tracking-wide">此备案正在审核</p>
+              </Match>
+              <Match when={true}>
+                <Meow />星 ICP 备案
+              </Match>
+            </Switch>
           </p>
         </header>
         {/* 获取过程中的错误将被 ErrorBoundary 捕获 */}
         <ErrorBoundary fallback={renderFailure("发生了一些错误！")}>
           {/* 在获取数据时，Suspense 将触发加载状态 */}
           <Suspense fallback={<div>{renderLoading()}</div>}>
-            {recordQuery.data?.success
-              ? renderSuccess(recordQuery.data.payload)
-              : renderFailure(recordQuery.data?.message || "服务器返回了错误。")}
+            <Switch>
+              <Match when={isReviewPending()}>
+                {renderReviewPending(params.siteId)}
+              </Match>
+              <Match when={true}>
+                {recordQuery.data?.success
+                  ? renderSuccess(recordQuery.data.payload)
+                  : renderFailure(recordQuery.data?.message || "服务器返回了错误。")}
+              </Match>
+            </Switch>
           </Suspense>
         </ErrorBoundary>
 

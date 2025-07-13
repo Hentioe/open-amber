@@ -12,11 +12,19 @@ export default new Elysia()
     return success(renderRecords(result));
   })
   .get("/api/records/:siteId", ({ params }) => {
-    const record = getRecordBy({ siteId: params.siteId, onlyApproved: true });
+    const record = getRecordBy({ siteId: params.siteId });
 
-    if (record) {
+    if (!record) {
+      return failure(MSG_NOT_FOUND);
+    }
+    if (record.reviewStatus === "pending") {
+      return failure("此备案正在审核中", { reason: "REVIEW_PENDING" });
+    }
+
+    if (record.reviewStatus === "approved") {
       return success(renderRecord(record));
     } else {
+      // 其余状态，如 rejected，返回未找到
       return failure(MSG_NOT_FOUND);
     }
   })
