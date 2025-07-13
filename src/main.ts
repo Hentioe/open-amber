@@ -53,11 +53,10 @@ function onStop() {
   log.info("Server is stopping...");
 }
 
-process.on("SIGINT", shutdown_signal);
 process.on("SIGTERM", shutdown_signal);
 
 function shutdown_signal() {
-  log.warn("Received SIGINT. Stopping server...");
+  log.warn("Received SIGTERM. Stopping server...");
 
   app.stop().then(() => {
     log.info("Server stopped");
