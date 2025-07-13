@@ -222,7 +222,7 @@ export default new Elysia()
       // 发送邮件
       recend.emails.send({
         from: config.RESEND_SENDER,
-        to: profile.email,
+        to: config.ADMIN_EMAIL,
         subject: "OpenAmber：新的备案申请",
         text: `
           基本信息：

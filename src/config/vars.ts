@@ -11,6 +11,7 @@ const vars = {
   REVIEW_SECRET: envVar("OPEN_AMBER_REVIEW_SECRET", { enforce: true })!,
   ENCRYPTION_KEY: envVar("OPEN_AMBER_ENCRYPTION_KEY", { enforce: true })!,
   ADMIN_API_KEY: envVar("OPEN_AMBER_ADMIN_API_KEY", { enforce: true })!,
+  ADMIN_EMAIL: envVar("OPEN_AMBER_ADMIN_EMAIL", { enforce: true })!,
   CAPINDE_BASE_URL: envVar("OPEN_AMBER_CAPINDE_BASE_URL", { fallback: fallbackCapindeBaseUrl() })!,
   CAPINDE_API_KEY: envVar("OPEN_AMBER_CAPINDE_API_KEY", { enforce: false })!,
   RESEND_API_KEY: envVar("OPEN_AMBER_RESEND_API_KEY", { enforce: true })!,
