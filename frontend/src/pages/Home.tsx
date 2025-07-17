@@ -1,9 +1,10 @@
 import { useNavigate } from "@solidjs/router";
+import { useQuery } from "@tanstack/solid-query";
 import { AiFillGithub } from "solid-icons/ai";
 import { FaBrandsBloggerB, FaSolidPlaceOfWorship } from "solid-icons/fa";
 import { IoDocumentText } from "solid-icons/io";
-import { createSignal, Match, onMount, Switch } from "solid-js";
-import { searchRecord } from "../api";
+import { createSignal, For, Match, onMount, Show, Switch } from "solid-js";
+import { recentlyRecords, searchRecord } from "../api";
 import BottomNav from "../components/BottomNav";
 import MeowFont from "../components/MeowFont";
 import { showJoin } from "../state/bottom-nav";
@@ -14,6 +15,12 @@ export default () => {
   const [inputKeyword, setInputKeyword] = createSignal<string>("");
   const [searchError, setSearchError] = createSignal<string | undefined>(undefined);
   const [isSearching, setIsSearching] = createSignal<boolean>(false);
+
+  const recentlyQuery = useQuery(() => ({
+    queryKey: ["recently-records"],
+    queryFn: () => recentlyRecords(),
+    throwOnError: true,
+  }));
 
   const handleKeywordInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
@@ -86,11 +93,43 @@ export default () => {
             </Match>
           </Switch>
         </div>
-        <p class="px-[2rem] text-center text-base md:text-lg text-yellow-300 font-meow tracking-wide">
-          由于 <span class="underline">7 月 1 日</span>前线上环境的邮箱配置有误，该时间前提交过的人请重新提交：（
-        </p>
+        <Switch>
+          <Match when={recentlyQuery.isLoading}>
+            <p class="text-center">加载中……</p>
+          </Match>
+          <Match when={true}>
+            <RecentlyJoin records={(recentlyQuery.data?.payload as ServerData.Record[]).slice(0, 3)} />
+          </Match>
+        </Switch>
         <BottomNav />
       </div>
     </main>
+  );
+};
+
+const RecentlyJoin = (props: { records: ServerData.Record[] }) => {
+  return (
+    <div class="text-zinc-150 tracking-wider px-[1rem] break-all">
+      最近{" "}
+      <For each={props.records}>
+        {(record, index) => (
+          <>
+            <a href={`/sites/${record.siteId}`} class="underline">
+              {record.siteName}
+            </a>
+            <Comma index={index()} length={props.records.length} />
+          </>
+        )}
+      </For>{" "}
+      等加入了喵星备案，<a href="/navigation" class="underline">访问更多...</a>
+    </div>
+  );
+};
+
+const Comma = (props: { index: number; length: number }) => {
+  return (
+    <Show when={props.index < props.length - 1}>
+      <span>，</span>
+    </Show>
   );
 };
