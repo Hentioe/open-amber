@@ -92,14 +92,16 @@ export default new Elysia()
   .use(myJwt)
   .use(prepareRoutes)
   .post("/api/submit/unverified", async ({ myJwt, body }) => {
-    const verifyResult = await capinde.verify({
+    const verified = await capinde.verify({
       uniqueId: body.captcha.unique_id,
-      answer: { text: body.captcha.text },
+      answer: { text: body.captcha.text, ignoreCase: true },
     });
-    if (!verifyResult.ok) {
-      return failure(captchaErrorMessage(verifyResult.val));
+
+    if (!verified.ok) {
+      return failure(captchaErrorMessage(verified.val));
     }
-    if (verifyResult.val.ok) {
+
+    if (verified.val.ok) {
       // 检查邮箱格式是否正确
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
         return failure("邮箱格式不正确", { reason: "EMAIL_INVALID" });
