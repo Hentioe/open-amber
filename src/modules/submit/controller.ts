@@ -122,7 +122,7 @@ export default new Elysia()
       });
 
       return success({
-        message: "邮件已发送，请从邮箱进入提交步骤",
+        message: "邮件已发送，请从邮箱进入提交步骤（留意垃圾箱）",
         sender: config.RESEND_SENDER,
       });
     } else {
