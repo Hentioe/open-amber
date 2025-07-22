@@ -4,11 +4,7 @@
 "cargo:dprint" = "latest"
 
 [tasks.setup]
-run = [
-  "bun install",
-  "pnpm --prefix frontend install",
-  "mkdir public -p",
-]
+run = ["bun install", "pnpm --prefix frontend install", "mkdir public -p"]
 
 [tasks.dev]
 run = "concurrently \"bun run dev\" \"pnpm --prefix frontend dev\""
@@ -54,3 +50,6 @@ run = "mise run env-deps stop"
 
 [tasks.clean]
 run = "rm -rf public dist node_modules frontend/node_modules data"
+
+[tasks.count]
+run = "cloc src tests frontend/src"
