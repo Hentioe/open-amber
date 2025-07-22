@@ -1,3 +1,4 @@
+import { useNavigate } from "@solidjs/router";
 import classNames from "classnames";
 import { createSignal, Match, onMount, Switch } from "solid-js";
 import { getSubmitPrepare, submit } from "../api";
@@ -10,6 +11,7 @@ import { hiddenJoin } from "../state/bottom-nav";
 import { setTitle } from "../state/meta";
 
 export default () => {
+  const navigate = useNavigate();
   const [siteId, setSiteId] = createSignal<string>("00000000");
   const [name, setName] = createSignal<string>("");
   const [domain, setDomain] = createSignal<string>("");
@@ -86,6 +88,10 @@ export default () => {
 
     if (resp.success) {
       setSubmitted(resp.payload);
+      // 提交成功，3 秒后自动导航到该站点的备案页面
+      setTimeout(() => {
+        navigate(`/sites/${siteId()}`);
+      }, 3000);
     } else {
       let message = resp.message;
       if (resp.reason === "CAPTCHA_INVALID") {
