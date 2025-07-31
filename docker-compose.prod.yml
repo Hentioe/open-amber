@@ -25,7 +25,7 @@ services:
         condition: service_healthy
 
   capinde:
-    image: hentioe/capinde:0.1.0-beta
+    image: hentioe/capinde:0.1.1
     restart: always
     environment:
       CAPINDE_HOST: 0.0.0.0
