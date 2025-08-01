@@ -1,3 +1,4 @@
+import "./instrument"; // Ensure Sentry is initialized before any other imports
 import staticPlugin from "@elysiajs/static";
 import Elysia from "elysia";
 import banner from "./banner.txt";
@@ -33,7 +34,7 @@ const app = new Elysia()
   .use(FallbackController)
   .listen(config.PORT);
 
-injectRootServer(app.server); // 子实例的 ratelimit() 需要
+injectRootServer(app.server); // 子实例的 elysia-rate-limit 需要
 
 function preparing() {
   process.stdout.write(`${banner}\n`);

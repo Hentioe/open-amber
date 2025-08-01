@@ -17,6 +17,7 @@ services:
       OPEN_AMBER_ADMIN_EMAIL: ${OPEN_AMBER_ADMIN_EMAIL}
       OPEN_AMBER_RESEND_API_KEY: ${OPEN_AMBER_RESEND_API_KEY}
       OPEN_AMBER_RESEND_SENDER: ${OPEN_AMBER_RESEND_SENDER}
+      # OPEN_AMBER_SENTRY_DSN: ${OPEN_AMBER_SENTRY_DSN}
     volumes:
       - ./data:/home/open-amber/data
       - ./shared_assets:/home/open-amber/shared_assets
