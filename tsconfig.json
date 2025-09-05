@@ -25,5 +25,5 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["build.ts", "src", "env.d.ts"]
+  "include": ["build.ts", "src/**/*", "tests/**/*"]
 }
