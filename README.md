@@ -11,10 +11,10 @@ OpenAmber 是[喵星备案](https://icp.hentioe.dev/)的开源实现。它是一
 
 本项目的主要代码皆用 TypeScript 编写：
 
-- 后端通过 Bun 构建和运行（同时作为运行时）。
+- 后端通过 Bun 构建和同时作为运行时。
 - 前端使用 SolidJS + TailwindCSS v4，通过 Node.js 构建（仅构建）。
 
-由于使用嵌入式的 SQLite 来存储信息，不需要部署独立的数据库服务。其中敏感信息（如邮箱）是加密存储的。唯一依赖的外部服务是验证码功能，它是用 Rust 实现的独立服务，名为 Capinde（待开源）。
+由于使用嵌入式的 SQLite 来存储信息，不需要部署独立的数据库服务。其中敏感信息（如邮箱）是加密存储的。唯一依赖的外部服务是验证码功能（[Capinde](https://github.com/Hentioe/capinde)），它是用 Rust 实现的独立服务。
 
 ## 优势
 
